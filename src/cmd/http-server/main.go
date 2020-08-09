@@ -110,7 +110,10 @@ func gracefullyShutdownServer(server *http.Server, quit <-chan os.Signal, done c
 
 	close(done)
 }
+func test_app(w http.ResponseWriter, req *http.Request) {
 
+	fmt.Fprintf(w, "Hello\n")
+}
 func main() {
 	// redis config vars
 	redisHost := os.Getenv("REDIS_HOST")
@@ -152,6 +155,7 @@ func main() {
 	// Produces an event on kafka with a number
 	router.HandleFunc("/produce", sc.produceHandler)
 
+	router.HandleFunc("/test", test_app)
 	srv := http.Server{
 		Addr:    fmt.Sprintf(":%s", serverPort),
 		Handler: http.TimeoutHandler(router, time.Duration(serverTimeout)*time.Second, "Server Timeout"),

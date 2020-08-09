@@ -1,0 +1,56 @@
+  
+version: '2'
+
+services:
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    ports:
+      - '2181:2181'
+    volumes:
+      - 'zookeeper_data:/bitnami'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - app_net
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    ports:
+      - '9092:9092'
+    volumes:
+      - 'C:\Users\Vishal\Repositories\redis-kafka-docker-playground\kafka_data:/bitnami/kafka'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+    depends_on:
+      - zookeeper
+    networks:
+      - app_net
+
+  redis:
+    image: 'redis'
+    ports: 
+      - '6379:6379'
+    networks:
+      - app_net
+
+  app_server:
+    build: .
+    ports:
+      - '8080:8080'
+    volumes:
+      - 'C:\Users\Vishal\Repositories\redis-kafka-docker-playground\src:/app'
+    networks:
+      - app_net
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
+networks:
+  app_net:
+    driver: bridge

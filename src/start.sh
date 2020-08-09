@@ -6,7 +6,7 @@ export REDIS_PASSWORD="";
 
 export KAFKA_HOST="kafka";
 export KAFKA_PORT="9092";
-export KAFKA_TOPIC="number";
+export KAFKA_TOPIC="numbers";
 export KAFKA_CONSUMER_GROUP="numbers-group";
 
 export HTTP_SERVER_PORT="8080";
